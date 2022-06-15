@@ -1,7 +1,8 @@
+import { useState } from "react";
 import "./styles.css";
 
 export default function App() {
-  const filterList = [
+  const list = [
     "Banana",
     "Orange",
     "Pinapale",
@@ -12,8 +13,24 @@ export default function App() {
     "Pomegranate"
   ];
 
-  const seachFilter = (val) => {
-    console.log("test", val);
+  const [filterList, setFilterList] = useState();
+
+  const seachFilter = (event) => {
+    if (event.target.value === "") {
+      setFilterList(list);
+      return;
+    }
+
+    /**
+     * Item convert into lowercase;
+     * indexOf will help you to check position/charchter using input
+     */
+    const filterValues = list.filter(
+      (item) =>
+        item.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+    );
+    setFilterList(filterValues);
+    console.log(filterValues);
   };
 
   return (
@@ -21,14 +38,13 @@ export default function App() {
       <h1>Search Filter From Lists</h1>
       <h3>Keep going or go home</h3>
 
-      <input
-        type="text"
-        name="query"
-        onChange={(e) => seachFilter(e.target.value)}
-      />
+      <input type="text" name="query" onChange={seachFilter} />
 
       <ul>
-        <li>Banana</li>
+        {filterList &&
+          filterList.map((item, index) => (
+            <li key={index}>{item}</li> //Display each item
+          ))}
       </ul>
     </div>
   );
